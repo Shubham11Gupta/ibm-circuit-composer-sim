@@ -18,7 +18,7 @@ samples = psi.sample_memory(10)
 print(samples) 
 
 
-O = qi.SparsePauliOp(['XX','YY','ZZ'],[0.2,-0.3,0.4   ])
+O = qi.SparsePauliOp(['XX','YY','ZZ'],[0.2,-0.3,0.4])
 print(O)
 o_exp = psi.expectation_value(O)
 print(o_exp)
