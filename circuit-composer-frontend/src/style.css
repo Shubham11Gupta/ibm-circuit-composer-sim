@@ -1,0 +1,194 @@
+/* src/style.css */
+
+body {
+  margin: 0;
+  font-family: "IBM Plex Sans";
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.header {
+  background-color: var(--cds-background, #21272a);
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #f2f4f8;
+  font-family: "IBM Plex Sans";
+  font-weight: inherit
+}
+
+.split-view {
+  display: flex;
+  flex: 1;
+  height: 100%;
+}
+
+.display,
+.code-section {
+  padding: 1rem;
+  overflow: auto;
+  height: 100%;
+}
+
+.display {
+  background-color: #f9f9f9;
+}
+
+.code-section {
+  background-color: #f0f0f0;
+  border-left: 1px solid #ccc;
+}
+
+/* Styling for the draggable divider */
+.gutter {
+  background-color: #ccc;
+  cursor: col-resize;
+  width: 6px;
+}
+
+.vertical-split {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.circuit,
+.output {
+  padding: 1rem;
+  overflow: auto;
+  height: 100%;
+}
+
+.circuit {
+  background-color: #fff;
+  border-bottom: 1px solid #ccc;
+}
+
+.output {
+  background-color: #f7f7f7;
+  border-top: 1px solid #ccc;
+}
+
+/* Vertical gutter */
+.gutter.gutter-vertical {
+  background-color: #ccc;
+  cursor: row-resize;
+  height: 6px;
+  width: 100%;
+}
+
+/* CircuitEditor Layout */
+.circuit-editor {
+  display: flex;
+  height: 100%;
+}
+
+.inventory-area {
+  width: 200px;
+  border-right: 1px solid #ccc;
+  padding: 0.5rem;
+  background-color: #f4f4f4;
+  overflow-y: auto;
+}
+
+.gate-inventory {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 50px);
+  gap: 0.5rem;
+}
+
+.gate {
+  background-color: #222;
+  color: white;
+  text-align: center;
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: grab;
+}
+
+.dropzone-area {
+  flex: 1;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.dropzone {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.qubit-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.qubit-label {
+  width: 60px;
+  font-weight: bold;
+}
+
+.qubit-gates {
+  display: flex;
+  gap: 4px;
+  flex-grow: 1;
+}
+
+.gate-slot {
+  width: 40px;
+  height: 40px;
+  border: 1px dashed #aaa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gate-box {
+  background-color: #ccc;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.row-label {
+  width: 60px;
+  font-weight: bold;
+}
+
+.gate-slot-area {
+  flex: 1;
+  min-height: 40px;
+  background-color: #fafafa;
+  border: 1px dashed #ccc;
+  margin-left: 0.5rem;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+}
+
+.controls {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.delete-drop {
+  border: 2px dashed #c44;
+  color: #c44;
+  padding: 10px 20px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+}
