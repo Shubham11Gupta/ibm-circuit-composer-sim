@@ -178,17 +178,20 @@ body {
   padding-left: 10px;
 }
 
-.controls {
-  margin-top: 0.5rem;
-  display: flex;
-  gap: 0.5rem;
+.delete-drop {
+  border: 2px dashed red;
+  padding: 0.5rem 1rem;
+  color: red;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: auto;
+  text-align: center;
 }
 
-.delete-drop {
-  border: 2px dashed #c44;
-  color: #c44;
-  padding: 10px 20px;
-  font-weight: bold;
-  border-radius: 6px;
-  cursor: pointer;
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
 }

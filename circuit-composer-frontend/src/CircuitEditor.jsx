@@ -1,3 +1,4 @@
+// src/CircuitEditor.jsx
 import React, { useState } from 'react'
 import GateInventory from './GateInventory'
 import DropZone from './DropZone'
@@ -6,19 +7,21 @@ import './style.css'
 
 function CircuitEditor() {
   const [qubitCount, setQubitCount] = useState(5)
-  const [gates, setGates] = useState(Array(5).fill(null).map(() => Array(10).fill(null)))
+  const [gates, setGates] = useState(
+    Array(5).fill(null).map(() => Array(10).fill(null))
+  )
 
   const increaseQubits = () => {
     if (qubitCount < 25) {
       setQubitCount(qubitCount + 1)
-      setGates((prev) => [...prev, Array(10).fill(null)])
+      setGates([...gates, Array(10).fill(null)])
     }
   }
 
   const decreaseQubits = () => {
     if (qubitCount > 1) {
       setQubitCount(qubitCount - 1)
-      setGates((prev) => prev.slice(0, -1))
+      setGates(gates.slice(0, -1))
     }
   }
 
@@ -27,13 +30,19 @@ function CircuitEditor() {
       <div className="inventory-area">
         <GateInventory />
       </div>
+
       <div className="dropzone-area">
         <DropZone qubitCount={qubitCount} gates={gates} setGates={setGates} />
+
         <div className="controls">
-          <button onClick={increaseQubits}>+</button>
-          <button onClick={decreaseQubits}>-</button>
-          <button>Generate Code</button>
-          <DeleteDrop gates={gates} setGates={setGates} />
+          <div>
+            <button onClick={increaseQubits}>+</button>
+            <button onClick={decreaseQubits}>-</button>
+            <button>Generate Code</button>
+          </div>
+          <div className="delete-area">
+            <DeleteDrop gates={gates} setGates={setGates} />
+          </div>
         </div>
       </div>
     </div>

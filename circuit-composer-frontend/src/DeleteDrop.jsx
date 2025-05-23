@@ -1,25 +1,22 @@
+// src/DeleteDrop.jsx
 import React from 'react'
 import { useDrop } from 'react-dnd'
-import './style.css'
 
 export default function DeleteDrop({ gates, setGates }) {
-  const [{ isOver }, drop] = useDrop(() => ({
+  const [, drop] = useDrop(() => ({
     accept: 'gate',
     drop: (item) => {
-      const updated = [...gates]
       if (item.from === 'row') {
+        const updated = [...gates]
         updated[item.row][item.col] = null
         setGates(updated)
       }
-    },
-    collect: (monitor) => ({
-      isOver: monitor.isOver()
-    })
-  }))
+    }
+  }), [gates])
 
   return (
-    <div ref={drop} className="delete-drop" style={{ backgroundColor: isOver ? '#fdd' : '#fee' }}>
-      🗑 Delete Gate
+    <div ref={drop} className="delete-drop">
+      🗑️ Delete Gate
     </div>
   )
 }
