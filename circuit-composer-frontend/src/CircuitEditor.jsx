@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import GateInventory from './GateInventory';
+import GateInventory from './GateInventory.jsx';
 import DropZone from './DropZone';
 import DeleteDrop from './DeleteDrop';
 import './style.css';
