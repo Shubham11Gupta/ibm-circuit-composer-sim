@@ -4,21 +4,36 @@ import DropZone from './DropZone';
 import DeleteDrop from './DeleteDrop';
 import './style.css';
 
-function CircuitEditor() {
-  const [qubitCount, setQubitCount] = useState(5);
+function CircuitEditor({ qubitCount, setQubitCount }) {
   const [gates, setGates] = useState(Array(qubitCount + 1).fill(null).map(() => Array(10).fill(null)));
+
+  // Update gates array size when qubitCount changes
+  React.useEffect(() => {
+    setGates(prevGates => {
+      const newLength = qubitCount + 1;
+      if (prevGates.length === newLength) return prevGates;
+      if (prevGates.length < newLength) {
+        // Add new rows
+        return [
+          ...prevGates,
+          ...Array(newLength - prevGates.length).fill(null).map(() => Array(10).fill(null))
+        ];
+      } else {
+        // Remove rows
+        return prevGates.slice(0, newLength);
+      }
+    });
+  }, [qubitCount]);
 
   const increaseQubits = () => {
     if (qubitCount < 25) {
       setQubitCount(qubitCount + 1);
-      setGates((prevGates) => [...prevGates, Array(10).fill(null)]);
     }
   };
 
   const decreaseQubits = () => {
     if (qubitCount > 1) {
       setQubitCount(qubitCount - 1);
-      setGates((prevGates) => prevGates.slice(0, -1));
     }
   };
 
