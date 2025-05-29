@@ -55,19 +55,21 @@ export default function QubitRow({ index, gates, setGates }) {
     <div className="qubit-row" ref={drop}>
       <div className="qubit-label">q[{index}]</div>
       <div className="qubit-gates">
-        {gates[index]
-        .map((gate, col) => ({ gate, col }))
-        .filter(({ gate }) => gate !== null)
-        .map(({ gate, col }, i) => (
-            <Gate
-            key={gate.id || `${gate.name}-${col}`}
-            gate={gate}
-            row={index}
-            col={col}
-            setGates={setGates}
-            gates={gates}
-            />
-        ))}
+        {gates[index].map((gate, col) => {
+          if (gate) {
+            return (
+              <Gate
+                key={gate.id || `${gate.name}-${col}`}
+                gate={gate}
+                row={index}
+                col={col}
+                setGates={setGates}
+                gates={gates}
+              />
+            )
+          }
+          return <div className="gate-slot" key={col} />
+        })}
       </div>
     </div>
   )

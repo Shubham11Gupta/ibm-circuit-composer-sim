@@ -7,8 +7,11 @@ export default function DeleteDrop({ gates, setGates }) {
     accept: 'gate',
     drop: (item) => {
       if (item.from === 'row') {
-        const updated = [...gates]
-        updated[item.row][item.col] = null
+        const updated = gates.map(row => [...row])
+        const span = item.span || 1
+        for (let i = 0; i < span; i++) {
+          if (updated[item.row + i]) updated[item.row + i][item.col] = null
+        }
         setGates(updated)
       }
     }

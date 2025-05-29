@@ -20,13 +20,38 @@ export default function Gate({ gate, row, col }) {
 
   if (!gate) return <div className="gate-slot" />
 
+  // Only root is draggable and shows the name, others show connector
   return (
     <div
       ref={gate.root ? drag : null}
       className={`gate-slot filled${gate.span > 1 ? ' multi-span' : ''}`}
-      style={{ opacity: isDragging ? 0.5 : 1 }}
+      style={{ opacity: isDragging ? 0.5 : 1, position: 'relative' }}
     >
-      {gate.root ? gate.name : <span className="gate-span-connector" />}
+      {gate.root ? (
+        <>
+          <span>{gate.name}</span>
+          {gate.span > 1 && (
+            <span className="gate-span-vertical" style={{
+              position: 'absolute',
+              left: '50%',
+              top: '100%',
+              width: '2px',
+              height: `calc(40px * ${gate.span - 1})`,
+              background: '#4caf50',
+              transform: 'translateX(-50%)'
+            }} />
+          )}
+        </>
+      ) : (
+        // Connector only
+        <span className="gate-span-connector" style={{
+          width: '2px',
+          height: '100%',
+          background: '#4caf50',
+          display: 'block',
+          margin: '0 auto'
+        }} />
+      )}
     </div>
   )
 }
