@@ -11,15 +11,19 @@ export default function QubitRow({ index, gates, setGates }) {
       const span = item.span || 1
       const totalQubitRows = gates.length - 1 // last row is classical
 
+      // For Phase gate, span should be all qubit rows (excluding classical)
+      const isPhase = item.name === 'Phase'
+      const actualSpan = isPhase ? totalQubitRows : span
+
       // Only allow if gate fits in available rows
-      if (index + span > totalQubitRows) return
+      if (index + actualSpan > totalQubitRows) return
 
       // Find the next available slot (column) in this row
       const nextSlot = gates[index].findIndex(g => g === null)
       if (nextSlot === -1) return
 
       // Check all rows in the span for slot availability
-      for (let i = 0; i < span; i++) {
+      for (let i = 0; i < actualSpan; i++) {
         if (gates[index + i][nextSlot] !== null) return
       }
 
@@ -38,11 +42,11 @@ export default function QubitRow({ index, gates, setGates }) {
 
       // Place new gate in all spanned rows
       const gateId = item.id || crypto.randomUUID()
-      for (let i = 0; i < span; i++) {
+      for (let i = 0; i < actualSpan; i++) {
         updated[index + i][nextSlot] = {
           id: gateId,
           name: item.name,
-          span: span,
+          span: actualSpan,
           root: i === 0 // Only the top row is the root for rendering
         }
       }

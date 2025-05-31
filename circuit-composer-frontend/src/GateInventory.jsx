@@ -1,7 +1,7 @@
 // src/GateInventory.jsx
 import React from 'react'
 import { useDrag } from 'react-dnd'
-import gates from './gateInventory.js' // Make sure this exports an array of objects like { name: 'CNOT', span: 2 }
+import gates from './gateInventory.js'
 
 function Gate({ gate }) {
   const [{ isDragging }, drag] = useDrag(() => ({
@@ -19,10 +19,15 @@ function Gate({ gate }) {
   )
 }
 
-export default function GateInventory() {
+export default function GateInventory({ qubitCount }) {
+  // Dynamically set Phase gate's span to qubitCount
+  const dynamicGates = gates.map(gate =>
+    gate.name === 'Phase' ? { ...gate, span: qubitCount } : gate
+  )
+
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
-      {gates.map(gate => (
+      {dynamicGates.map(gate => (
         <Gate key={gate.name} gate={gate} />
       ))}
     </div>

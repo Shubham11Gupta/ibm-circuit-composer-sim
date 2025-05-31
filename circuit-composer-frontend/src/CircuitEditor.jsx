@@ -4,7 +4,7 @@ import DropZone from './DropZone';
 import DeleteDrop from './DeleteDrop';
 import './style.css';
 
-function CircuitEditor({ qubitCount, setQubitCount }) {
+function CircuitEditor({ qubitCount, setQubitCount, onCircuitChange }) {
   const [gates, setGates] = useState(Array(qubitCount + 1).fill(null).map(() => Array(10).fill(null)));
 
   // Update gates array size when qubitCount changes
@@ -25,6 +25,13 @@ function CircuitEditor({ qubitCount, setQubitCount }) {
     });
   }, [qubitCount]);
 
+  // Call onCircuitChange whenever gates or qubitCount changes
+  React.useEffect(() => {
+    if (onCircuitChange) {
+      onCircuitChange(gates, qubitCount);
+    }
+  }, [gates, qubitCount, onCircuitChange]);
+
   const increaseQubits = () => {
     if (qubitCount < 25) {
       setQubitCount(qubitCount + 1);
@@ -40,7 +47,7 @@ function CircuitEditor({ qubitCount, setQubitCount }) {
   return (
     <div className="circuit-editor">
       <div className="inventory-area">
-        <GateInventory />
+        <GateInventory qubitCount={qubitCount} /> {/* Pass qubitCount here */}
       </div>
 
       <div className="dropzone-area">
