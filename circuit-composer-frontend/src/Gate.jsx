@@ -2,6 +2,34 @@
 import React from 'react'
 import { useDrag } from 'react-dnd'
 
+const gateSymbols = {
+  Hadamard: 'H',
+  Not: 'X',
+  CNOT: 'C',
+  Toffoli: 'T',
+  SWAP: 'SW',
+  Identity: 'I',
+  T: 'T',
+  S: 'S',
+  Z: 'Z',
+  Tdg: 'T†',
+  Sdg: 'S†',
+  Phase: 'P',
+  RZ: 'RZ',
+  Reset: 'R',
+  Barrier: '||',
+  SX: 'SX',
+  SXdg: 'SX†',
+  Y: 'Y',
+  RX: 'RX',
+  RY: 'RY',
+  RXX: 'RXX',
+  RZZ: 'RZZ',
+  U: 'U',
+  rccx: 'rccx',
+  rc3x: 'rc3x'
+}
+
 export default function Gate({ gate, row, col }) {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: 'gate',
@@ -20,16 +48,18 @@ export default function Gate({ gate, row, col }) {
 
   if (!gate) return <div className="gate-slot" />
 
-  // Only root is draggable and shows the name, others show connector
+  const gateClass = `gate-block gate-${gate.name.toLowerCase()}`
+
   return (
     <div
       ref={gate.root ? drag : null}
-      className={`gate-slot filled${gate.span > 1 ? ' multi-span' : ''}`}
+      className={gateClass}
       style={{ opacity: isDragging ? 0.5 : 1, position: 'relative' }}
+      title={gate.name}
     >
       {gate.root ? (
         <>
-          <span>{gate.name}</span>
+          <span>{gateSymbols[gate.name] || gate.name[0]}</span>
           {gate.span > 1 && (
             <span className="gate-span-vertical" style={{
               position: 'absolute',
@@ -43,7 +73,6 @@ export default function Gate({ gate, row, col }) {
           )}
         </>
       ) : (
-        // Connector only
         <span className="gate-span-connector" style={{
           width: '2px',
           height: '100%',

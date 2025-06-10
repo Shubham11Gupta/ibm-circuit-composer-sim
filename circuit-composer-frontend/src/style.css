@@ -129,34 +129,41 @@ body {
 }
 
 .dropzone {
-  flex: 1;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* vertical space between qubit rows */
+  margin-top: 16px;
 }
 
 .qubit-row {
   display: flex;
   align-items: center;
-  margin-bottom: 8px;
+  /* Remove margin-bottom if present */
 }
 
 .qubit-label {
   width: 60px;
   font-weight: bold;
+  text-align: right;
+  margin-right: 12px;
 }
 
 .qubit-gates {
   display: flex;
-  gap: 4px;
-  flex-grow: 1;
+  gap: 8px; /* horizontal space between cells */
 }
 
 .gate-slot {
   width: 40px;
   height: 40px;
-  border: 1px dashed #aaa;
+  border: 1.5px dashed #bbb;
+  border-radius: 6px;
+  background: #fff;
+  box-sizing: border-box;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  /* Remove margin if present */
 }
 
 .gate-box {
@@ -198,12 +205,6 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem;
-}
-
-.dropzone {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
 }
 
 .qubit-row {
@@ -277,3 +278,54 @@ body {
   resize: none;
   box-sizing: border-box;
 }
+
+.gate-inventory-block {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border-radius: 6px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  border: 2px solid #222;
+  cursor: grab;
+}
+
+.gate-block {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border: 2px solid #222;
+  box-sizing: border-box;
+  cursor: grab;
+  margin: 0; /* Ensure no margin */
+  background: #fff; /* fallback */
+}
+
+/* Example for Hadamard */
+.gate-hadamard {
+  background: #e53935;
+  color: #fff;
+}
+
+/* Example for CNOT */
+.gate-cnot {
+  background: #3949ab;
+  color: #fff;
+}
+
+/* Example for Not */
+.gate-not {
+  background: #00897b;
+  color: #fff;
+}
+
+/* Add more for each gate as desired */

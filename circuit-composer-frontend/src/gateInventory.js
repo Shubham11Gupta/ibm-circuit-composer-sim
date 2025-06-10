@@ -1,6 +1,6 @@
 // src/gateInventory.js
 const gateInventory = [
-  { name: 'H', span: 1 },
+  { name: 'Hadamard', span: 1 },
   { name: 'Not', span: 1 },
   { name: 'CNOT', span: 2 },
   { name: 'Toffoli', span: 3 },
@@ -11,7 +11,6 @@ const gateInventory = [
   { name: 'Z', span: 1 },
   { name: 'Tdg', span: 1 },
   { name: 'Sdg', span: 1 },
-  { name: 'Phase', span: 1 },
   { name: 'RZ', span: 1 },
   { name: 'Reset', span: 1 },
   { name: 'Barrier', span: 1 },
@@ -26,6 +25,7 @@ const gateInventory = [
   { name: 'rccx', span: 3 },
   { name: 'rc3x', span: 4 },
   { name: 'Phase', span: 1 },
+  { name: 'Measure', span: 1 }, // <-- Added Measure gate
 ];
 
 export default gateInventory;

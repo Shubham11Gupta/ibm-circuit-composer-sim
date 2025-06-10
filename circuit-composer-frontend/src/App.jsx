@@ -17,11 +17,39 @@ from qiskit_aer import Aer,AerSimulator
 simulater = AerSimulator()
 `;
 
+const gateToQiskit = {
+  Hadamard:   (row)        => `qc.h(${row})`,
+  Not:        (row)        => `qc.x(${row})`,
+  CNOT:       (row)        => `qc.cx(${row}, ${row+1})`,
+  Toffoli:    (row)        => `qc.ccx(${row}, ${row+1}, ${row+2})`,
+  SWAP:       (row)        => `qc.swap(${row}, ${row+1})`,
+  Identity:   (row)        => `qc.id(${row})`,
+  T:          (row)        => `qc.t(${row})`,
+  S:          (row)        => `qc.s(${row})`,
+  Z:          (row)        => `qc.z(${row})`,
+  Tdg:        (row)        => `qc.tdg(${row})`,
+  Sdg:        (row)        => `qc.sdg(${row})`,
+  Phase:      (row)        => `qc.p(0.5, ${row})`, // handled specially if needed
+  RZ:         (row)        => `qc.rz(0.5, ${row})`,
+  Reset:      (row)        => `qc.reset(${row})`,
+  Barrier:    (row)        => `qc.barrier(${row})`,
+  SX:         (row)        => `qc.sx(${row})`,
+  SXdg:       (row)        => `qc.sxdg(${row})`,
+  Y:          (row)        => `qc.y(${row})`,
+  RX:         (row)        => `qc.rx(0.5, ${row})`,
+  RY:         (row)        => `qc.ry(0.5, ${row})`,
+  RXX:        (row)        => `qc.rxx(0.5, ${row}, ${row+1})`,
+  RZZ:        (row)        => `qc.rzz(0.5, ${row}, ${row+1})`,
+  U:          (row)        => `qc.u(0.1, 0.2, 0.3, ${row})`,
+  rccx:       (row)        => `qc.rccx(${row}, ${row+1}, ${row+2})`,
+  rc3x:       (row)        => `qc.rc3x(${row}, ${row+1}, ${row+2}, ${row+3})`,
+  Measure:    (row)        => `qc.measure(${row}, ${row})`, // <-- Added Measure gate usage
+}
+
 function generateQiskitCode(gates, qubitCount) {
   let code = codeHeader + `qc= QuantumCircuit(${qubitCount})\n`;
-  // gates: [row][col]
   for (let col = 0; col < gates[0].length; col++) {
-    // Check if any row has a Phase gate at this column
+    // Special handling for Phase: if any row has Phase, apply to all rows
     let isPhaseColumn = false;
     for (let row = 0; row < qubitCount; row++) {
       const gate = gates[row][col];
@@ -31,21 +59,17 @@ function generateQiskitCode(gates, qubitCount) {
       }
     }
     if (isPhaseColumn) {
-      // Apply Phase to all qubits at this column
       for (let row = 0; row < qubitCount; row++) {
-        code += `qc.p(0.5, ${row})\n`; // 0.5 is an example phase angle
+        code += gateToQiskit['Phase'](row) + '\n';
       }
-      continue; // Skip other gates in this column
+      continue;
     }
-    // Otherwise, handle other gates as usual
+    // Otherwise, handle all other gates
     for (let row = 0; row < qubitCount; row++) {
       const gate = gates[row][col];
-      if (!gate) continue;
-      // Example: handle Hadamard
-      if (gate.name === 'H') code += `qc.h(${row})\n`;
-      // Add more gate mappings here as needed
-      // if (gate.name === 'X') code += `qc.x(${row})\n`;
-      if (gate.name === 'CNOT') code += `qc.cx(${row}, ${row+1})\n`;
+      if (!gate || !gate.root) continue; // Only process root for multi-row gates
+      const fn = gateToQiskit[gate.name];
+      if (fn) code += fn(row) + '\n';
     }
   }
   return code;
