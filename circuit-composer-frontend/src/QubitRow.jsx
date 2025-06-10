@@ -5,13 +5,12 @@ import Gate from './Gate'
 import './style.css'
 
 export default function QubitRow({ index, gates, setGates }) {
+  const totalQubitRows = gates.length - 1 // last row is classical
+
   const [, drop] = useDrop(() => ({
     accept: 'gate',
     drop: (item) => {
       const span = item.span || 1
-      const totalQubitRows = gates.length - 1 // last row is classical
-
-      // For Phase gate, span should be all qubit rows (excluding classical)
       const isPhase = item.name === 'Phase'
       const actualSpan = isPhase ? totalQubitRows : span
 
@@ -19,11 +18,21 @@ export default function QubitRow({ index, gates, setGates }) {
       if (index + actualSpan > totalQubitRows) return
 
       // Find the next available slot (column) in this row
-      const nextSlot = gates[index].findIndex(g => g === null)
+      const nextSlot = gates[index].findIndex((g, col) => {
+        // Check for measure above in this column
+        for (let r = 0; r <= index; r++) {
+          if (gates[r][col] && gates[r][col].name === 'Measure') return false
+        }
+        return g === null
+      })
       if (nextSlot === -1) return
 
-      // Check all rows in the span for slot availability
+      // Check all rows in the span for slot availability and measure above
       for (let i = 0; i < actualSpan; i++) {
+        // Check for measure above in this column
+        for (let r = 0; r <= index + i; r++) {
+          if (gates[r][nextSlot] && gates[r][nextSlot].name === 'Measure') return
+        }
         if (gates[index + i][nextSlot] !== null) return
       }
 
@@ -53,7 +62,15 @@ export default function QubitRow({ index, gates, setGates }) {
 
       setGates(updated)
     }
-  }), [gates])
+  }), [gates, index, setGates])
+
+  // Helper: for rendering, check if this cell is disabled due to measure above
+  function isCellDisabled(col) {
+    for (let r = 0; r <= index; r++) {
+      if (gates[r][col] && gates[r][col].name === 'Measure') return true
+    }
+    return false
+  }
 
   return (
     <div className="qubit-row" ref={drop}>
@@ -70,7 +87,11 @@ export default function QubitRow({ index, gates, setGates }) {
               gates={gates}
             />
           ) : (
-            <div className="gate-slot" key={col} />
+            <div
+              className="gate-slot"
+              key={col}
+              style={isCellDisabled(col) ? { background: "#eee", opacity: 0.5, pointerEvents: "none" } : {}}
+            />
           )
         )}
       </div>
