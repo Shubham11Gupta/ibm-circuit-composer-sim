@@ -49,18 +49,27 @@ const gateToQiskit = {
 function generateQiskitCode(gates, qubitCount) {
   let code = codeHeader + `qc= QuantumCircuit(${qubitCount})\n`;
   for (let col = 0; col < gates[0].length; col++) {
-    // Special handling for Phase: if any row has Phase, apply to all rows
+    // Special handling for Phase and Measure: if any row has Phase or Measure, apply to all rows
     let isPhaseColumn = false;
+    let isMeasureColumn = false;
     for (let row = 0; row < qubitCount; row++) {
       const gate = gates[row][col];
       if (gate && gate.name === 'Phase') {
         isPhaseColumn = true;
-        break;
+      }
+      if (gate && gate.name === 'Measure') {
+        isMeasureColumn = true;
       }
     }
     if (isPhaseColumn) {
       for (let row = 0; row < qubitCount; row++) {
         code += gateToQiskit['Phase'](row) + '\n';
+      }
+      continue;
+    }
+    if (isMeasureColumn) {
+      for (let row = 0; row < qubitCount; row++) {
+        code += gateToQiskit['Measure'](row) + '\n';
       }
       continue;
     }
@@ -79,6 +88,7 @@ function App() {
   const [qubitCount, setQubitCount] = useState(5);
   const [code, setCode] = useState(codeHeader + `qc= QuantumCircuit(5)\n`);
   const [userEdited, setUserEdited] = useState(false);
+  const [output, setOutput] = useState(''); // <-- Add output state
 
   // Called by CircuitEditor when gates change
   const handleCircuitChange = (gates, newQubitCount) => {
@@ -92,8 +102,19 @@ function App() {
     setUserEdited(true);
   };
 
-  const handleSubmit = () => {
-    alert('Submitted code:\n' + code);
+  const handleSubmit = async () => {
+    setOutput('Submitting...');
+    try {
+      const res = await fetch('http://localhost:8000/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code }),
+      });
+      const data = await res.json();
+      setOutput(data.ack || JSON.stringify(data));
+    } catch (err) {
+      setOutput('Error: ' + err.message);
+    }
   };
 
   return (
@@ -118,7 +139,7 @@ function App() {
               />
             </div>
             <div className="output">
-              <p>This is the output section.</p>
+              <p>{output || "This is the output section."}</p>
             </div>
           </Split>
         </div>

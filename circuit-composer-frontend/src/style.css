@@ -329,3 +329,34 @@ body {
 }
 
 /* Add more for each gate as desired */
+
+/* Qubit control buttons */
+.qubit-btn {
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 1.3rem;
+  cursor: pointer;
+  box-shadow: 0 1px 2px #bbb;
+  margin-right: 8px;
+  transition: background 0.2s, color 0.2s;
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qubit-btn-decrease {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.qubit-btn-increase {
+  background: #4caf50;
+  color: #fff;
+}
+
+.qubit-btn:active {
+  filter: brightness(0.95);
+}

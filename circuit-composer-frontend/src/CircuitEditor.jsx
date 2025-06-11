@@ -55,9 +55,16 @@ function CircuitEditor({ qubitCount, setQubitCount, onCircuitChange }) {
 
         <div className="controls" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
           <div>
-            <button onClick={increaseQubits}>+</button>
-            <button onClick={decreaseQubits}>-</button>
-            <button>Generate Code</button>
+            <button
+              onClick={decreaseQubits}
+              className="qubit-btn qubit-btn-decrease"
+              title="Remove Qubit"
+            >−</button>
+            <button
+              onClick={increaseQubits}
+              className="qubit-btn qubit-btn-increase"
+              title="Add Qubit"
+            >＋</button>
           </div>
 
           {/* Delete Drop Target on extreme right */}
