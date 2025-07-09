@@ -5,15 +5,7 @@ import CodeSection from './CodeSection'
 import './style.css'
 
 const codeHeader = 
-`from qiskit import QuantumCircuit
-from qiskit.circuit.library import HGate
-from qiskit.providers.basic_provider import BasicSimulator
-from qiskit.quantum_info import Statevector
-import matplotlib.pyplot as plt
-from qiskit.visualization import plot_distribution
-from qiskit.circuit.library import QFT
-from qiskit import transpile
-from qiskit_aer import Aer,AerSimulator
+`
 simulater = AerSimulator()
 `;
 
@@ -122,7 +114,7 @@ function App() {
       <header className="header">
         <h1>IBM Quantum Circuit Composer Simulator</h1>
       </header>
-      <Split className="split-view" sizes={[70, 30]} minSize={200} gutterSize={6}>
+      <Split className="split-view" sizes={[65, 35]} minSize={200} gutterSize={6}>
         <div className="display">
           <Split
             direction="vertical"
