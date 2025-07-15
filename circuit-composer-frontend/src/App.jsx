@@ -21,7 +21,7 @@ const gateToQiskit = {
   Z:          (row)        => `qc.z(${row})`,
   Tdg:        (row)        => `qc.tdg(${row})`,
   Sdg:        (row)        => `qc.sdg(${row})`,
-  Phase:      (row)        => `qc.p(0.5, ${row})`, // handled specially if needed
+  Phase:      (row)        => `qc.p(0.5, ${row})`,
   RZ:         (row)        => `qc.rz(0.5, ${row})`,
   Reset:      (row)        => `qc.reset(${row})`,
   Barrier:    (row)        => `qc.barrier(${row})`,
@@ -35,22 +35,21 @@ const gateToQiskit = {
   U:          (row)        => `qc.u(0.1, 0.2, 0.3, ${row})`,
   rccx:       (row)        => `qc.rccx(${row}, ${row+1}, ${row+2})`,
   rc3x:       (row)        => `qc.rc3x(${row}, ${row+1}, ${row+2}, ${row+3})`,
-  Measure:    (row)        => `qc.measure(${row}, ${row})`, // <-- Added Measure gate usage
+  Measure:    (row)        => `qc.measure(${row}, 0)`, // Only measure for the dropped row
+  MeasureAll: ()           => `qc.measure_all()`,      // New gate for measure_all
 }
 
 function generateQiskitCode(gates, qubitCount) {
-  let code = codeHeader + `qc= QuantumCircuit(${qubitCount})\n`;
+  let code = codeHeader + `qc= QuantumCircuit(${qubitCount},${qubitCount})\n`;
+  let measureAllDropped = false;
+
   for (let col = 0; col < gates[0].length; col++) {
-    // Special handling for Phase and Measure: if any row has Phase or Measure, apply to all rows
+    // Special handling for Phase
     let isPhaseColumn = false;
-    let isMeasureColumn = false;
     for (let row = 0; row < qubitCount; row++) {
       const gate = gates[row][col];
       if (gate && gate.name === 'Phase') {
         isPhaseColumn = true;
-      }
-      if (gate && gate.name === 'Measure') {
-        isMeasureColumn = true;
       }
     }
     if (isPhaseColumn) {
@@ -59,20 +58,38 @@ function generateQiskitCode(gates, qubitCount) {
       }
       continue;
     }
-    if (isMeasureColumn) {
-      for (let row = 0; row < qubitCount; row++) {
-        code += gateToQiskit['Measure'](row) + '\n';
-      }
-      continue;
-    }
-    // Otherwise, handle all other gates
+
+    // Check for MeasureAll gate in this column
     for (let row = 0; row < qubitCount; row++) {
       const gate = gates[row][col];
-      if (!gate || !gate.root) continue; // Only process root for multi-row gates
+      if (gate && gate.name === 'MeasureAll') {
+        measureAllDropped = true;
+        break;
+      }
+    }
+
+    // For Measure, only append for the row where Measure was dropped
+    for (let row = 0; row < qubitCount; row++) {
+      const gate = gates[row][col];
+      if (gate && gate.name === 'Measure') {
+        code += gateToQiskit['Measure'](row) + '\n';
+      }
+    }
+
+    // Otherwise, handle all other gates except Measure and MeasureAll
+    for (let row = 0; row < qubitCount; row++) {
+      const gate = gates[row][col];
+      if (!gate || !gate.root) continue;
       const fn = gateToQiskit[gate.name];
-      if (fn) code += fn(row) + '\n';
+      if (fn && gate.name !== 'Measure' && gate.name !== 'MeasureAll') code += fn(row) + '\n';
     }
   }
+
+  // If MeasureAll was dropped anywhere, append qc.measure_all()
+  if (measureAllDropped) {
+    code += gateToQiskit['MeasureAll']() + '\n';
+  }
+
   return code;
 }
 

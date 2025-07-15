@@ -14,17 +14,19 @@ simulater = AerSimulator()
 #Code Append Start
 
 simulater = AerSimulator()
-qc= QuantumCircuit(5)
+qc= QuantumCircuit(3,3)
 qc.h(0)
+qc.x(0)
 qc.cx(0, 1)
+qc.measure(0, 0)
 
 #Code Append End
 
-statevector_sim = AerSimulator(method='statevector')
+qc.save_statevector()
 qc_t = transpile(qc, simulater)
 job = simulater.run(qc_t,shots=1024)
 result= job.result()
-print(result)
+#print(result)
 
 # Get statevector
 statevector = Statevector(result.get_statevector(qc))

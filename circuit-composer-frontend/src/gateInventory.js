@@ -25,7 +25,8 @@ const gateInventory = [
   { name: 'rccx', span: 3 },
   { name: 'rc3x', span: 4 },
   { name: 'Phase', span: 1 },
-  { name: 'Measure', span: 1 }, // <-- Added Measure gate
+  { name: 'Measure', span: 1 },      // Existing Measure gate
+  { name: 'MeasureAll', span: 1 },   // <-- Added MeasureAll gate
 ];
 
 export default gateInventory;
