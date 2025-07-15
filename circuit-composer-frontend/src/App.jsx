@@ -102,13 +102,15 @@ function App() {
   // Called by CircuitEditor when gates change
   const handleCircuitChange = (gates, newQubitCount) => {
     setQubitCount(newQubitCount);
-    setCode(generateQiskitCode(gates, newQubitCount));
-    setUserEdited(false);
+    if (!userEdited) {
+      setCode(generateQiskitCode(gates, newQubitCount));
+    }
+    // Only update code if user hasn't edited manually
   };
 
   const handleCodeChange = (e) => {
     setCode(e.target.value);
-    setUserEdited(true);
+    setUserEdited(true); // Mark as user-edited
   };
 
   const handleSubmit = async () => {
