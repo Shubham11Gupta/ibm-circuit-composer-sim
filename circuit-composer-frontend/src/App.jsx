@@ -21,17 +21,17 @@ const gateToQiskit = {
   Z:          (row)        => `qc.z(${row})`,
   Tdg:        (row)        => `qc.tdg(${row})`,
   Sdg:        (row)        => `qc.sdg(${row})`,
-  Phase:      (row)        => `qc.p(0.5, ${row})`,
-  RZ:         (row)        => `qc.rz(0.5, ${row})`,
+  Phase:      (row, angle=0.5)        => `qc.p(${angle}, ${row})`,
+  RZ:         (row, angle=0.5)        => `qc.rz(${angle}, ${row})`,
   Reset:      (row)        => `qc.reset(${row})`,
   Barrier:    (row)        => `qc.barrier(${row})`,
   SX:         (row)        => `qc.sx(${row})`,
   SXdg:       (row)        => `qc.sxdg(${row})`,
   Y:          (row)        => `qc.y(${row})`,
-  RX:         (row)        => `qc.rx(0.5, ${row})`,
-  RY:         (row)        => `qc.ry(0.5, ${row})`,
-  RXX:        (row)        => `qc.rxx(0.5, ${row}, ${row+1})`,
-  RZZ:        (row)        => `qc.rzz(0.5, ${row}, ${row+1})`,
+  RX:         (row, angle=0.5)        => `qc.rx(${angle}, ${row})`,
+  RY:         (row, angle=0.5)        => `qc.ry(${angle}, ${row})`,
+  RXX:        (row, angle=0.5)        => `qc.rxx(${angle}, ${row}, ${row+1})`,
+  RZZ:        (row, angle=0.5)        => `qc.rzz(${angle}, ${row}, ${row+1})`,
   U:          (row)        => `qc.u(0.1, 0.2, 0.3, ${row})`,
   rccx:       (row)        => `qc.rccx(${row}, ${row+1}, ${row+2})`,
   rc3x:       (row)        => `qc.rc3x(${row}, ${row+1}, ${row+2}, ${row+3})`,
@@ -54,7 +54,9 @@ function generateQiskitCode(gates, qubitCount) {
     }
     if (isPhaseColumn) {
       for (let row = 0; row < qubitCount; row++) {
-        code += gateToQiskit['Phase'](row) + '\n';
+        const gate = gates[row][col];
+        const angle = gate?.angle ?? 0.5;
+        code += gateToQiskit['Phase'](row, angle) + '\n';
       }
       continue;
     }
@@ -81,7 +83,14 @@ function generateQiskitCode(gates, qubitCount) {
       const gate = gates[row][col];
       if (!gate || !gate.root) continue;
       const fn = gateToQiskit[gate.name];
-      if (fn && gate.name !== 'Measure' && gate.name !== 'MeasureAll') code += fn(row) + '\n';
+      if (fn && gate.name !== 'Measure' && gate.name !== 'MeasureAll') {
+        if (['Phase', 'RZ', 'RX', 'RY', 'RXX', 'RZZ'].includes(gate.name)) {
+          const angle = gate.angle ?? 0.5;
+          code += fn(row, angle) + '\n';
+        } else {
+          code += fn(row) + '\n';
+        }
+      }
     }
   }
 

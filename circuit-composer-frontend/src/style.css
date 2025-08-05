@@ -388,3 +388,36 @@ body {
     height: 200px;
   }
 }
+
+.angle-input-group {
+  display: flex;
+  align-items: center;
+  background: #f5f7fa;
+  border-radius: 8px;
+  padding: 0.3rem 0.7rem;
+  margin-right: 14px;
+  box-shadow: 0 1px 4px #3949ab22;
+  border: 1.5px solid #bbb;
+}
+
+.angle-label {
+  margin-right: 8px;
+  font-weight: 500;
+  color: #3949ab;
+  font-size: 1.08rem;
+}
+
+.angle-input {
+  width: 60px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1.5px solid #bbb;
+  padding: 0.2rem 0.5rem;
+  background: #fff;
+  transition: border 0.2s;
+}
+
+.angle-input:focus {
+  border: 1.5px solid #3949ab;
+  outline: none;
+}
