@@ -1,0 +1,423 @@
+/* src/style.css */
+
+/* --- General Improvements --- */
+body {
+  margin: 0;
+  font-family: "IBM Plex Sans", Arial, sans-serif;
+  background: #f4f6fb;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #f4f6fb;
+}
+
+.header {
+  background-color: var(--cds-background, #21272a);
+  display: flex;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 2px 8px #0001;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.7rem;
+  color: #f2f4f8;
+  font-family: "IBM Plex Sans";
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.split-view {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.display,
+.code-section {
+  padding: 1.5rem;
+  overflow: auto;
+}
+
+.display {
+  background: #f9fafd;
+}
+
+.code-section {
+  background: #f5f7fa;
+  border-left: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0 0 0 12px;
+  box-shadow: -2px 0 8px #0001;
+}
+
+/* Styling for the draggable divider */
+.gutter {
+  background: #e0e0e0;
+  cursor: col-resize;
+}
+
+.vertical-split {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.circuit,
+.output {
+  padding: 1.2rem;
+  overflow: auto;
+  height: 100%;
+  border-radius: 12px;
+}
+
+.circuit {
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 8px #0001;
+}
+
+.output {
+  background: #f7f7fa;
+  border-top: 1px solid #e0e0e0;
+  box-shadow: 0 -2px 8px #0001;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 1.05rem;
+  color: #333;
+  border-radius: 12px;
+}
+
+/* --- Circuit Editor --- */
+.circuit-editor {
+  display: flex;
+  height: 100%;
+}
+
+.inventory-area {
+  width: 210px;
+  border-right: 1px solid #e0e0e0;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+  background: #f4f6fb;
+  overflow-y: auto;
+  border-radius: 12px 0 0 12px;
+}
+
+.gate-inventory-block {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  border: 2px solid #222;
+  cursor: grab;
+  background: #fff;
+  transition: box-shadow 0.2s, border 0.2s;
+  box-shadow: 0 1px 4px #0001;
+}
+
+.gate-inventory-block:hover {
+  border: 2px solid #3949ab;
+  box-shadow: 0 2px 8px #3949ab22;
+}
+
+.gate-inventory {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 50px);
+  gap: 0.5rem;
+}
+
+.dropzone-area {
+  flex: 1;
+  padding: 0.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.qubit-row,
+.classical-row {
+  display: flex;
+  align-items: center;
+}
+
+.qubit-label {
+  width: 60px;
+  font-weight: 600;
+  text-align: right;
+  margin-right: 14px;
+  color: #3949ab;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 1.08rem;
+}
+
+.qubit-gates {
+  display: flex;
+  gap: 10px;
+}
+
+.gate-slot {
+  width: 44px;
+  height: 44px;
+  border: 1.5px dashed #bbb;
+  border-radius: 8px;
+  background: #fff;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border 0.2s;
+}
+
+.gate-slot:active,
+.gate-slot:focus {
+  border: 1.5px solid #3949ab;
+}
+
+.gate-block {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border: 2px solid #222;
+  box-sizing: border-box;
+  cursor: grab;
+  margin: 0;
+  background: #fff;
+  box-shadow: 0 1px 4px #0001;
+  transition: box-shadow 0.2s, border 0.2s;
+}
+
+.gate-block:hover {
+  border: 2px solid #3949ab;
+  box-shadow: 0 2px 8px #3949ab22;
+}
+
+/* Example for Hadamard */
+.gate-hadamard { background: #e53935; color: #fff; }
+.gate-cnot { background: #3949ab; color: #fff; }
+.gate-not { background: #00897b; color: #fff; }
+.gate-t { background: #ffb300; color: #fff; }
+.gate-s { background: #43a047; color: #fff; }
+.gate-z { background: #6d4c41; color: #fff; }
+.gate-tdg { background: #ff7043; color: #fff; }
+.gate-sdg { background: #00bcd4; color: #fff; }
+.gate-phase { background: #8e24aa; color: #fff; }
+.gate-rz { background: #5e35b1; color: #fff; }
+.gate-reset { background: #757575; color: #fff; }
+.gate-barrier { background: #bdbdbd; color: #222; }
+.gate-sx { background: #1e88e5; color: #fff; }
+.gate-sxdg { background: #039be5; color: #fff; }
+.gate-y { background: #388e3c; color: #fff; }
+.gate-rx { background: #fbc02d; color: #fff; }
+.gate-ry { background: #0288d1; color: #fff; }
+.gate-rxx { background: #c62828; color: #fff; }
+.gate-rzz { background: #ad1457; color: #fff; }
+.gate-u { background: #6d4c41; color: #fff; }
+.gate-rccx { background: #0097a7; color: #fff; }
+.gate-rc3x { background: #7e57c2; color: #fff; }
+.gate-identity { background: #bdbdbd; color: #222; }
+.gate-measure { background: #ff9800; color: #fff; }
+
+/* --- Qubit Controls --- */
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0 0.5rem 0;
+}
+
+.qubit-btn {
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 1.4rem;
+  cursor: pointer;
+  box-shadow: 0 1px 2px #bbb;
+  margin-right: 8px;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #e0e0e0;
+}
+
+.qubit-btn-decrease {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.qubit-btn-increase {
+  background: #3949ab;
+  color: #fff;
+}
+
+.qubit-btn:active {
+  filter: brightness(0.95);
+  box-shadow: 0 2px 8px #3949ab33;
+  border: 2px solid #3949ab;
+}
+
+/* --- Delete Drop --- */
+.delete-drop {
+  border: 2px dashed #e53935;
+  padding: 0.5rem 1.2rem;
+  color: #e53935;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-left: auto;
+  text-align: center;
+  background: #fff;
+  transition: background 0.2s, border 0.2s;
+  box-shadow: 0 1px 4px #e5393511;
+}
+
+.delete-drop:hover {
+  background: #ffebee;
+  border: 2px solid #e53935;
+}
+
+/* --- Code Section --- */
+#code-editor {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+  height: 350px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1.5px solid #bbb;
+  padding: 10px;
+  resize: vertical;
+  box-sizing: border-box;
+  background: #fff;
+  margin-bottom: 8px;
+  transition: border 0.2s;
+}
+
+#code-editor:focus {
+  border: 1.5px solid #3949ab;
+  outline: none;
+}
+
+.code-section label {
+  font-size: 1.08rem;
+  color: #3949ab;
+  margin-bottom: 6px;
+}
+
+.code-section button {
+  background: #3949ab;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  font-size: 1.08rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 1px 4px #3949ab22;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.code-section button:hover {
+  background: #303f9f;
+  box-shadow: 0 2px 8px #3949ab33;
+}
+
+/* --- Miscellaneous --- */
+.gate-span-vertical {
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 2px;
+  background: #4caf50;
+  transform: translateX(-50%);
+}
+
+.gate-span-connector {
+  width: 2px;
+  height: 100%;
+  background: #4caf50;
+  display: block;
+  margin: 0 auto;
+}
+
+/* --- Responsive --- */
+@media (max-width: 900px) {
+  .inventory-area {
+    width: 120px;
+    font-size: 0.9rem;
+  }
+  .gate-inventory-block,
+  .gate-block,
+  .gate-slot {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+  .qubit-label {
+    width: 40px;
+    font-size: 0.95rem;
+  }
+  #code-editor {
+    font-size: 0.95rem;
+    height: 200px;
+  }
+}
+
+.angle-input-group {
+  display: flex;
+  align-items: center;
+  background: #f5f7fa;
+  border-radius: 8px;
+  padding: 0.3rem 0.7rem;
+  margin-right: 14px;
+  box-shadow: 0 1px 4px #3949ab22;
+  border: 1.5px solid #bbb;
+}
+
+.angle-label {
+  margin-right: 8px;
+  font-weight: 500;
+  color: #3949ab;
+  font-size: 1.08rem;
+}
+
+.angle-input {
+  width: 60px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1.5px solid #bbb;
+  padding: 0.2rem 0.5rem;
+  background: #fff;
+  transition: border 0.2s;
+}
+
+.angle-input:focus {
+  border: 1.5px solid #3949ab;
+  outline: none;
+}
