@@ -15,10 +15,13 @@ simulater = AerSimulator()
 #Code Append Start
 
 simulater = AerSimulator()
-qc= QuantumCircuit(1,1)
+qc= QuantumCircuit(3,3)
 qc.h(0)
-qc.t(0)
-qc.id(0)
+qc.t(1)
+qc.tdg(2)
+qc.swap(0, 1)
+qc.rx(0.69, 0)
+qc.cx(1, 2)
 
 #Code Append End
 
