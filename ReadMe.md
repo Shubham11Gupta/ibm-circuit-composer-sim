@@ -61,8 +61,7 @@ docker-compose down
 - **Qiskit Code:** See and edit the generated Qiskit code.
 - **Output Section:** View statevector and probability graphs side by side.
 
-![IBM Circuit Composer Simulator Screenshot 1](circuit-composer-frontend\src\assets\qcc.png)
-![IBM Circuit Composer Simulator Screenshot 2](circuit-composer-frontend\src\assets\qcc2.png)
+<img height="330" width="240" src="circuit-composer-frontend\src\assets\qcc.png">
 
 ---
 
