@@ -61,7 +61,7 @@ docker-compose down
 - **Qiskit Code:** See and edit the generated Qiskit code.
 - **Output Section:** View statevector and probability graphs side by side.
 
-<img height="330" width="240" src="circuit-composer-frontend\src\assets\qcc.png">
+<img src="circuit-composer-frontend\src\assets\qcc2.png">
 
 ---
 
