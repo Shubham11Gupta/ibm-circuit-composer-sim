@@ -8,14 +8,17 @@ from qiskit.circuit.library import QFT
 from qiskit import transpile
 from qiskit_aer import Aer, AerSimulator
 import numpy as np
+import json
 
 simulater = AerSimulator()
 
 #Code Append Start
 
 simulater = AerSimulator()
-qc= QuantumCircuit(3,3)
+qc= QuantumCircuit(1,1)
 qc.h(0)
+qc.t(0)
+qc.id(0)
 
 #Code Append End
 
@@ -60,3 +63,14 @@ plt.legend()
 plt.tight_layout()
 plt.savefig("output_statevector.png")
 plt.close()
+
+# Save statevector and probabilities as JSON for frontend plotting
+# Convert complex statevector to [real, imag] pairs for each amplitude
+statevector_list = [[float(np.real(x)), float(np.imag(x))] for x in statevector.data]
+probabilities_list = [float(p) for p in probabilities]
+
+with open("output_data.json", "w") as f:
+    json.dump({
+        "statevector": statevector_list,
+        "probabilities": probabilities_list
+    }, f)

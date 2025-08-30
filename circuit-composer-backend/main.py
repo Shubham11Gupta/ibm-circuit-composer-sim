@@ -5,6 +5,7 @@ import os
 import sys
 import subprocess
 import base64
+import json
 
 app = FastAPI()
 
@@ -78,10 +79,23 @@ async def submit_code(payload: CodePayload):
                 statevec_b64 = base64.b64encode(img_file.read()).decode("utf-8")
             os.remove(statevec_path)
 
+        # Read output_data.json for raw arrays
+        statevector = None
+        probabilities = None
+        data_path = os.path.join(os.path.dirname(__file__), "output_data.json")
+        if os.path.exists(data_path):
+            with open(data_path, "r") as f:
+                data_json = json.load(f)
+                statevector = data_json.get("statevector")
+                probabilities = data_json.get("probabilities")
+            os.remove(data_path)
+
         return {
             "result": output,
             "probabilities_plot_base64": prob_b64,
-            "statevector_plot_base64": statevec_b64
+            "statevector_plot_base64": statevec_b64,
+            "statevector": statevector,
+            "probabilities": probabilities
         }
     except Exception as e:
         return {"error": str(e)}
