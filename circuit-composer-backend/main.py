@@ -4,6 +4,7 @@ from pydantic import BaseModel
 import os
 import sys
 import subprocess
+import base64
 
 app = FastAPI()
 
@@ -60,6 +61,27 @@ async def submit_code(payload: CodePayload):
             text=True
         )
         output = result.stdout + result.stderr
-        return {"result": output}
+
+        # Read output_probabilities.png as base64 if it exists
+        prob_b64 = None
+        prob_path = os.path.join(os.path.dirname(__file__), "output_probabilities.png")
+        if os.path.exists(prob_path):
+            with open(prob_path, "rb") as img_file:
+                prob_b64 = base64.b64encode(img_file.read()).decode("utf-8")
+            os.remove(prob_path)
+
+        # Read output_statevector.png as base64 if it exists
+        statevec_b64 = None
+        statevec_path = os.path.join(os.path.dirname(__file__), "output_statevector.png")
+        if os.path.exists(statevec_path):
+            with open(statevec_path, "rb") as img_file:
+                statevec_b64 = base64.b64encode(img_file.read()).decode("utf-8")
+            os.remove(statevec_path)
+
+        return {
+            "result": output,
+            "probabilities_plot_base64": prob_b64,
+            "statevector_plot_base64": statevec_b64
+        }
     except Exception as e:
         return {"error": str(e)}
