@@ -35,7 +35,7 @@ A full-stack quantum circuit composer and simulator inspired by IBM Quantum Comp
 
 ### 1. **Clone the repository**
 ```sh
-git clone https://github.com/yourusername/ibm-circuit-composer-sim.git
+git clone https://github.com/Shubham11Gupta/ibm-circuit-composer-sim.git
 cd ibm-circuit-composer-sim
 ```
 
@@ -101,11 +101,6 @@ Pull requests are welcome! For major changes, please open an issue first to disc
 
 ---
 
-## 📄 License
-
-MIT
-
----
 
 ## 🙏 Acknowledgements
 
