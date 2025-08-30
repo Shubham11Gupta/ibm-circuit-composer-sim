@@ -5,6 +5,7 @@ WORKDIR /app
 
 COPY ./circuit-composer-frontend/ /app/
 
+RUN npm install chart.js react-chartjs-2
 RUN npm install
 RUN npm run build
 

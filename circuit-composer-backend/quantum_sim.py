@@ -8,17 +8,17 @@ from qiskit.circuit.library import QFT
 from qiskit import transpile
 from qiskit_aer import Aer, AerSimulator
 import numpy as np
+import json
 
 simulater = AerSimulator()
 
 #Code Append Start
 
 simulater = AerSimulator()
-qc= QuantumCircuit(3,3)
+qc= QuantumCircuit(1,1)
 qc.h(0)
-qc.x(0)
-qc.cx(0, 1)
-qc.measure(0, 0)
+qc.t(0)
+qc.id(0)
 
 #Code Append End
 
@@ -36,3 +36,41 @@ print(statevector)
 # Get probability distribution
 probabilities = statevector.probabilities()
 print("Probabilities:", probabilities)
+
+# Plot probabilities as a bar graph and save as output_probabilities.png
+plt.figure(figsize=(8, 4))
+plt.bar(range(len(probabilities)), probabilities)
+plt.xlabel('State Index')
+plt.ylabel('Probability')
+plt.title('Statevector Probabilities')
+plt.tight_layout()
+plt.savefig("output_probabilities.png")
+plt.close()
+
+# Plot statevector (real and imaginary parts) as a bar graph and save as output_statevector.png
+real = np.real(statevector.data)
+imag = np.imag(statevector.data)
+indices = np.arange(len(statevector.data))
+bar_width = 0.35
+
+plt.figure(figsize=(8, 4))
+plt.bar(indices - bar_width/2, real, bar_width, label='Real')
+plt.bar(indices + bar_width/2, imag, bar_width, label='Imag')
+plt.xlabel('State Index')
+plt.ylabel('Amplitude')
+plt.title('Statevector Amplitudes')
+plt.legend()
+plt.tight_layout()
+plt.savefig("output_statevector.png")
+plt.close()
+
+# Save statevector and probabilities as JSON for frontend plotting
+# Convert complex statevector to [real, imag] pairs for each amplitude
+statevector_list = [[float(np.real(x)), float(np.imag(x))] for x in statevector.data]
+probabilities_list = [float(p) for p in probabilities]
+
+with open("output_data.json", "w") as f:
+    json.dump({
+        "statevector": statevector_list,
+        "probabilities": probabilities_list
+    }, f)

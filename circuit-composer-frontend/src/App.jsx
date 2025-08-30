@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import Split from 'react-split'
 import CircuitEditor from './CircuitEditor'
 import CodeSection from './CodeSection'
+import OutputSection from './OutputSection';
 import './style.css'
 
 const codeHeader = 
@@ -123,7 +124,13 @@ function App() {
   };
 
   const handleSubmit = async () => {
-    setOutput('Submitting...');
+    // Preset output section with empty graphs
+    setOutput({
+      statevector_plot_base64: null,
+      probabilities_plot_base64: null,
+      result: "Running simulation..."
+    });
+
     try {
       const res = await fetch('http://localhost:8000/submit', {
         method: 'POST',
@@ -131,9 +138,13 @@ function App() {
         body: JSON.stringify({ code }),
       });
       const data = await res.json();
-      setOutput(data.ack || JSON.stringify(data));
+      setOutput(data); // Set the actual output from backend (graphs and result)
     } catch (err) {
-      setOutput('Error: ' + err.message);
+      setOutput({
+        statevector_plot_base64: null,
+        probabilities_plot_base64: null,
+        result: 'Error: ' + err.message
+      });
     }
   };
 
@@ -159,7 +170,7 @@ function App() {
               />
             </div>
             <div className="output">
-              <p>{output || "This is the output section."}</p>
+              <OutputSection outputJson={output} />
             </div>
           </Split>
         </div>
